@@ -92,9 +92,13 @@ function listDir(directoryId, localPath, isChildDir) {
               console.log(shellCommand);
               var result = execSync.stdout(shellCommand);
 
-              var afterStat =fs.statSync(finalPath);
-              deleteShowIfCompleted(api, fileNode, afterStat);
-
+              try {
+                var afterStat =fs.statSync(finalPath);
+                deleteShowIfCompleted(api, fileNode, afterStat);
+              } catch (error) {
+                console.log("Faild to delete " + finalPath + " error:" + error)
+              }
+              
               if (fileNode.size > 20 * 1024 * 1024) {
                 if (tvshow) {
                   push.send('put.io sync', 'downloaded an episode of ' + tvshow.name);
